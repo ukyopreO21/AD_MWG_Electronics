@@ -1,0 +1,62 @@
+.container {
+	display: flex;
+	flex-direction: column;
+	width: 280px;
+	height: 100%;
+	background-color: #4e4e4e;
+}
+
+.main {
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+	margin: 20px;
+	gap: 10px;
+}
+
+.navigation {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+img {
+	margin-bottom: 50px;
+}
+
+a {
+	all: unset;
+	width: 100%;
+	padding: 20px 0;
+	color: white;
+	cursor: pointer;
+	text-align: center;
+	border-radius: 8px;
+	transition: 0.1s all ease-in;
+}
+
+a:hover {
+	background-color: #616161;
+}
+
+a div {
+	display: flex;
+	align-items: center;
+	padding-left: 20px;
+	gap: 20px;
+}
+
+.icon {
+	width: 28px;
+	height: 28px;
+}
+
+.logout {
+	margin-top: auto;
+	display: flex;
+}
+
+.logout a {
+	background-color: #797979;
+	font-weight: 600;
+}

@@ -1,0 +1,19 @@
+.container {
+	display: flex;
+	height: 100vh;
+	width: 100%;
+	padding: 0;
+	margin: 0;
+	background-color: #c3c3c3;
+	flex: 1;
+	overflow: hidden;
+}
+
+.main {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	height: 100vh;
+	overflow: hidden;
+	background-color: white;
+}
