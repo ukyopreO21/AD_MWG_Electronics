@@ -3,14 +3,17 @@ import { useState } from "react";
 import { useUsers } from "../../hooks/useUsers";
 
 import formatDateTime from "../../utils/formatDateTime";
+import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
 
 import styles from "./Users.module.css";
-
+import { useEffect } from "react";
 export default () => {
     const [query, setQuery] = useState("");
     const [lastQuery, setLastQuery] = useState("");
-    const { users, page, totalPages, totalUsers, getUsersByQuery, updateUserActive } = useUsers();
-
+    const { users, page, totalPages, totalUsers, getUsersByQuery, updateUserActive, getAllUser, deleteUser } = useUsers();
+    useEffect(() => {
+        handleGetAllUsers();
+    }, []);
     const handleSearch = (e) => {
         if (e.key === "Enter" && query.trim() !== "") {
             getUsersByQuery(query);
@@ -30,7 +33,17 @@ export default () => {
         )
             updateUserActive(user._id, user.email, user.is_active);
     };
-
+    const handleGetAllUsers = () => {
+        getAllUser(1);
+        console.log(users);
+        setQuery("");
+        setLastQuery("");
+    }
+    const handleDelete = (id) => {
+        if (window.confirm("Bạn có chắc chắn muốn xoá người dùng này?")) {
+            deleteUser(id);
+        }
+    };
     return (
         <div className={styles.container}>
             <div className={styles.function}>
@@ -55,6 +68,8 @@ export default () => {
                         <th className={styles.address}>Địa chỉ</th>
                         <th className={styles.createdAt}>Thời gian tạo</th>
                         <th className={styles.isActive}>Trạng thái</th>
+                        <th className={styles.edit}>Xóa</th>
+
                     </tr>
                 </thead>
                 <tbody>
@@ -64,10 +79,12 @@ export default () => {
                             <td>{user.email}</td>
                             <td>{user.fullname}</td>
                             <td>{user.phone}</td>
-                            <td>{user.address}</td>
+                            <td>{user.adress}</td>
                             <td>{formatDateTime(user.createdAt)}</td>
                             <td>
-                                <button
+                                {user.is_active ? "Hoạt động" : "Không hoạt động"}
+
+                                {/* <button
                                     onClick={() => handleActive(user)}
                                     style={{
                                         color: user.is_active ? "white" : "black",
@@ -77,6 +94,13 @@ export default () => {
                                     }}
                                     className={styles.activeButton}>
                                     {user.is_active ? "Bình thường" : "Bị khoá"}
+                                </button>*/}
+                            </td>
+                            <td>
+                                <button
+                                    onClick={() => handleDelete(user._id)}
+                                    className={styles.deleteButton}>
+                                    <TrashIcon className={styles.icon} />
                                 </button>
                             </td>
                         </tr>
