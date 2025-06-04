@@ -13,12 +13,14 @@ export default () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalState, setModalState] = useState(null);
     const [query, setQuery] = useState("");
+    const [lastQuery, setLastQuery] = useState("");
     const { products, page, totalPages, getAllProducts, searchProducts, deleteProduct } =
         useProducts();
 
     const handleSearch = (e) => {
         if (e.key === "Enter" && query.trim() !== "") {
             searchProducts(query);
+            setLastQuery(query);
         }
     };
 
@@ -26,6 +28,11 @@ export default () => {
         if (window.confirm("Bạn có chắc chắn muốn xoá sản phẩm này?")) {
             deleteProduct(id);
         }
+    };
+
+    const handlePageChange = (newPage) => {
+        if (!query.trim()) getAllProducts(newPage);
+        else searchProducts(lastQuery, newPage);
     };
 
     useEffect(() => {
@@ -47,7 +54,7 @@ export default () => {
                     className={styles.searchBar}
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
-                    onKeyDown={handleSearch}
+                    onKeyDown={(e) => handleSearch(e)}
                 />
                 <button
                     onClick={() => {
@@ -106,7 +113,7 @@ export default () => {
             <div className={styles.pagination}>
                 <button
                     className={styles.pageButton}
-                    onClick={() => getAllProducts(page - 1)}
+                    onClick={() => handlePageChange(page - 1)}
                     disabled={page <= 1}>
                     Trước
                 </button>
@@ -115,7 +122,7 @@ export default () => {
                 </span>
                 <button
                     className={styles.pageButton}
-                    onClick={() => getAllProducts(page + 1)}
+                    onClick={() => handlePageChange(page + 1)}
                     disabled={page >= totalPages}>
                     Sau
                 </button>

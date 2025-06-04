@@ -20,9 +20,9 @@ export const useProducts = create((set) => ({
         }
     },
 
-    searchProducts: async (query) => {
+    searchProducts: async (query, page) => {
         try {
-            const res = await axiosInstance.get(`/product/search?q=${query}&rcm=0`);
+            const res = await axiosInstance.get(`/product/search?q=${query}&rcm=0&page=${page}`);
             set({
                 products: res.data.products || [],
                 page: res.data.page || 0,

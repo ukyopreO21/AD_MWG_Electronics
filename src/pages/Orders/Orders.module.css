@@ -49,13 +49,17 @@ tbody tr:hover {
 	background-color: #ccc;
 }
 
-.activeButton {
-	border: 1px solid var(--border-color);
-	width: 125px;
-	height: 40px;
-	font-size: 1rem;
+.editButton {
+	background: none;
+	outline: none;
+	border: none;
 	cursor: pointer;
-	border-radius: 4px;
+	color: #02457a;
+}
+
+.icon {
+	width: 28px;
+	height: 28px;
 }
 
 .pagination {

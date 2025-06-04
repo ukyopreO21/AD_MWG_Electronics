@@ -8,11 +8,9 @@ export const useUsers = create((set, get) => ({
     totalPages: 0,
     page: 1,
 
-    getUserByQuery: async (query) => {
+    getUsersByQuery: async (query, page) => {
         try {
-            const res = await axiosInstance.get(
-                `/user/query/${encodeURIComponent(query)}/${get().page}`
-            );
+            const res = await axiosInstance.get(`/user/query/${encodeURIComponent(query)}/${page}`);
             set({
                 users: res.data.users || [],
                 page: res.data.page || 0,
@@ -40,7 +38,7 @@ export const useUsers = create((set, get) => ({
             }));
             toast.success("Cập nhật người dùng thành công");
         } catch (error) {
-            console.error("Failed to edit product:", error);
+            console.error("Failed to edit user:", error);
             toast.error("Cập nhật người dùng thất bại");
         }
     },

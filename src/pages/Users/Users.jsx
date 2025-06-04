@@ -1,28 +1,25 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
-import { useUsers } from "../../hooks/useUser";
+import { useUsers } from "../../hooks/useUsers";
+
+import formatDateTime from "../../utils/formatDateTime";
 
 import styles from "./Users.module.css";
 
 export default () => {
     const [query, setQuery] = useState("");
-    const { users, page, totalPages, totalUsers, getUserByQuery, updateUserActive } = useUsers();
-
-    const formatDateTime = (dateString) => {
-        return new Date(dateString).toLocaleString("vi-VN", {
-            hour: "2-digit",
-            minute: "2-digit",
-            second: "2-digit",
-            day: "2-digit",
-            month: "2-digit",
-            year: "numeric",
-        });
-    };
+    const [lastQuery, setLastQuery] = useState("");
+    const { users, page, totalPages, totalUsers, getUsersByQuery, updateUserActive } = useUsers();
 
     const handleSearch = (e) => {
         if (e.key === "Enter" && query.trim() !== "") {
-            getUserByQuery(query);
+            getUsersByQuery(query);
+            setLastQuery(query);
         }
+    };
+
+    const handlePageChange = (newPage) => {
+        getUsersByQuery(lastQuery, newPage);
     };
 
     const handleActive = async (user) => {
@@ -90,7 +87,7 @@ export default () => {
             <div className={styles.pagination}>
                 <button
                     className={styles.pageButton}
-                    onClick={() => getAllusers(page - 1)}
+                    onClick={() => handlePageChange(page - 1)}
                     disabled={page <= 1}>
                     Trước
                 </button>
@@ -99,7 +96,7 @@ export default () => {
                 </span>
                 <button
                     className={styles.pageButton}
-                    onClick={() => getAllusers(page + 1)}
+                    onClick={() => handlePageChange(page + 1)}
                     disabled={page >= totalPages}>
                     Sau
                 </button>
