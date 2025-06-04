@@ -77,3 +77,14 @@ tbody tr:hover {
 	font-weight: 500;
 	transition: background-color 0.3s ease;
 }
+.icon {
+	width: 28px;
+	height: 28px;
+}
+.deleteButton {
+	background: none;
+	outline: none;
+	border: none;
+	cursor: pointer;
+	color: #ff4d4d;
+}

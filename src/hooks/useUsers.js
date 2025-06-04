@@ -7,7 +7,20 @@ export const useUsers = create((set, get) => ({
     totalUsers: 0,
     totalPages: 0,
     page: 1,
-
+    getAllUser: async (page) => {
+        try {
+            const res = await axiosInstance.get(`/user/all/${page}`);
+            set({
+                users: res.data.users || [],
+                page: res.data.page || 0,
+                totalPages: res.data.totalPages || 0,
+                totalUsers: res.data.totalUsers || 0,
+            });
+        } catch (error) {
+            console.error("Failed to fetch users:", error);
+            toast.error("Lỗi khi tải người dùng");
+        }
+    },
     getUsersByQuery: async (query, page) => {
         try {
             const res = await axiosInstance.get(`/user/query/${encodeURIComponent(query)}/${page}`);
@@ -40,6 +53,18 @@ export const useUsers = create((set, get) => ({
         } catch (error) {
             console.error("Failed to edit user:", error);
             toast.error("Cập nhật người dùng thất bại");
+        }
+    },
+    deleteUser: async (id) => {
+        try {
+            await axiosInstance.delete(`/user/${id}`);
+            set((state) => ({
+                users: state.users.filter((user) => user._id !== id),
+            }));
+            toast.success("Xoá người dùng thành công");
+        } catch (error) {
+            console.error("Failed to delete user:", error);
+            toast.error("Xoá người dùng thất bại");
         }
     },
 }));
