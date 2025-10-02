@@ -3,13 +3,6 @@ import { useRef, useEffect } from "react";
 export default ({ value, onChange, name }) => {
     const textareaRef = useRef(null);
 
-    const parseToCustomText = (obj) => {
-        if (!obj) return "";
-        return Object.entries(obj)
-            .map(([key, value]) => `"${key}": "${value}";`)
-            .join("\n");
-    };
-
     const handleInput = () => {
         const textarea = textareaRef.current;
         textarea.style.height = "auto";
@@ -26,7 +19,7 @@ export default ({ value, onChange, name }) => {
     return (
         <textarea
             ref={textareaRef}
-            value={parseToCustomText(value)}
+            value={value}
             onChange={onChange}
             onInput={handleInput}
             rows={1}
@@ -34,7 +27,7 @@ export default ({ value, onChange, name }) => {
             style={{
                 width: "100%",
                 resize: "none",
-                overflow: "hidden",
+                overflow: "auto",
                 lineHeight: "24px",
                 fontSize: "1rem",
                 padding: "8px",

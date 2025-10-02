@@ -15,35 +15,17 @@ export default ({ isModalOpen, setIsModalOpen, modalState, product }) => {
         product_id: product?.product_id || "",
         name: product?.name || "",
         product_line: product?.product_line || "",
-        description_obj: product?.description_obj || {},
+        description: product?.description || "",
         price: product?.price || 0,
         discount: product?.discount || 0,
         category: product?.category || "",
         brand: product?.brand || "",
-        specification_obj: product?.specification_obj || {},
-        img_obj: product?.img_obj || {},
+        specification_obj: product?.specification_obj || [],
+        images: product?.images || [],
         stock_quantity: product?.stock_quantity || 0,
         is_available: product?.is_available || true,
         warranty_period: product?.warranty_period || 0,
     });
-
-    const parseSpecifications = (text) => {
-        const obj = {};
-        const lines = text.split(";");
-
-        for (let line of lines) {
-            line = line.trim();
-            if (!line) continue;
-
-            try {
-                // Đảm bảo đúng định dạng JSON key-value
-                const formatted = `{${line}}`;
-                const parsed = JSON.parse(formatted);
-                Object.assign(obj, parsed);
-            } catch (e) {}
-        }
-        return obj;
-    };
 
     const handleChange = (e) => {
         const name = e.target.name;
@@ -86,13 +68,13 @@ export default ({ isModalOpen, setIsModalOpen, modalState, product }) => {
             product_id: "",
             name: "",
             product_line: "",
-            description_obj: {},
+            description: "",
             price: 0,
             discount: 0,
             category: "",
             brand: "",
-            specification_obj: {},
-            img_obj: {},
+            specification_obj: [],
+            images: [],
             stock_quantity: 0,
             is_available: true,
             warranty_period: 0,
@@ -100,37 +82,29 @@ export default ({ isModalOpen, setIsModalOpen, modalState, product }) => {
     };
 
     useEffect(() => {
-        if (!product) {
+        console.log(product);
+        if (product) {
             setFormData({
-                product_id: "",
-                name: "",
-                product_line: "",
-                description_obj: {},
-                price: 0,
-                discount: 0,
-                category: "",
-                brand: "",
-                specification_obj: {},
-                img_obj: {},
-                stock_quantity: 0,
-                is_available: true,
-                warranty_period: 0,
+                product_id: product.product_id || "",
+                name: product.name || "",
+                product_line: product.product_line || "",
+                description: product.description || "",
+                price: product.price || 0,
+                discount: product.discount || 0,
+                category: product.category || "",
+                brand: product.brand || "",
+                specification_obj: Array.isArray(product.specification_obj)
+                    ? product.specification_obj
+                    : [],
+                images: Array.isArray(product.images) ? product.images : [],
+                stock_quantity: product.stock_quantity || 0,
+                is_available: product.is_available ?? true,
+                warranty_period: product.warranty_period || 0,
             });
-            return;
+        } else {
+            resetFormData();
         }
-
-        setFormData((prevFormData) => {
-            const updatedData = { ...prevFormData };
-
-            Object.keys(prevFormData).forEach((key) => {
-                if (product.hasOwnProperty(key)) {
-                    updatedData[key] = product[key];
-                }
-            });
-
-            return updatedData;
-        });
-    }, [product]);
+    }, [product, isModalOpen]);
 
     return (
         <Modal
@@ -253,87 +227,125 @@ export default ({ isModalOpen, setIsModalOpen, modalState, product }) => {
                     <div className={styles.complexRow}>
                         <label>Mô tả</label>
                         <div>
-                            <input
-                                type="text"
-                                name="description_obj.des1"
-                                placeholder="Mô tả 1"
-                                value={formData.description_obj.des1}
-                                onChange={handleChange}
-                            />
-                            <input
-                                type="text"
-                                name="description_obj.des2"
-                                placeholder="Mô tả 2"
-                                value={formData.description_obj.des2}
-                                onChange={handleChange}
-                            />
-                            <input
-                                type="text"
-                                name="description_obj.des3"
-                                placeholder="Mô tả 3"
-                                value={formData.description_obj.des3}
-                                onChange={handleChange}
-                            />
-                            <input
-                                type="text"
-                                name="description_obj.des4"
-                                placeholder="Mô tả 4"
-                                value={formData.description_obj.des4}
-                                onChange={handleChange}
-                            />
-                        </div>
-                    </div>
-                    <div className={styles.complexRow}>
-                        <label>
-                            Thông số kỹ thuật (Mỗi một thông số một dòng:&nbsp;
-                            <i>"thông số":&nbsp;"giá trị"</i> và kết thúc bằng dấu chấm phẩu ";")
-                        </label>
-                        <div>
                             <AutoResizeTextarea
-                                name="specification_obj"
+                                name="description"
                                 onChange={handleChange}
-                                value={formData.specification_obj}
+                                value={formData.description}
                             />
                         </div>
                     </div>
                     <div className={styles.complexRow}>
-                        <label>Danh sách ảnh</label>
+                        <label>Thông số kỹ thuật</label>
+                        <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}></div>
                         <div>
-                            <input
-                                type="text"
-                                name="img_obj.productimg"
-                                placeholder="URL ảnh chính sản phẩm"
-                                value={formData.img_obj.productimg}
-                                onChange={handleChange}
-                            />
-                            <input
-                                type="text"
-                                name="img_obj.slider_image1"
-                                placeholder="URL ảnh 2"
-                                value={formData.img_obj.slider_image1}
-                                onChange={handleChange}
-                            />
-                            <input
-                                type="text"
-                                name="img_obj.slider_image2"
-                                placeholder="URL ảnh 3"
-                                value={formData.img_obj.slider_image2}
-                                onChange={handleChange}
-                            />
-                            <input
-                                type="text"
-                                name="img_obj.slider_image3"
-                                placeholder="URL ảnh 4"
-                                value={formData.img_obj.slider_image3}
-                                onChange={handleChange}
-                            />
-                            <input
-                                type="text"
-                                name="img_obj.slider_image4"
-                                placeholder="URL ảnh 5"
-                                value={formData.img_obj.slider_image4}
-                                onChange={handleChange}
-                            />
+                            {formData.specification_obj?.map((spec, idx) => (
+                                <div style={{ display: "flex", alignItems: "center" }} key={idx}>
+                                    <input
+                                        style={{ flex: 1 }}
+                                        type="text"
+                                        placeholder="Thông số"
+                                        value={spec.key}
+                                        onChange={(e) => {
+                                            const newSpecs = [...formData.specification_obj];
+                                            newSpecs[idx].key = e.target.value;
+                                            setFormData({
+                                                ...formData,
+                                                specification_obj: newSpecs,
+                                            });
+                                        }}
+                                    />
+                                    <input
+                                        style={{ flex: 2, marginLeft: "8px" }}
+                                        type="text"
+                                        placeholder="Giá trị"
+                                        value={spec.value}
+                                        onChange={(e) => {
+                                            const newSpecs = [...formData.specification_obj];
+                                            newSpecs[idx].value = e.target.value;
+                                            setFormData({
+                                                ...formData,
+                                                specification_obj: newSpecs,
+                                            });
+                                        }}
+                                    />
+                                    <button
+                                        style={{ marginLeft: "8px" }}
+                                        onClick={() => {
+                                            setFormData({
+                                                ...formData,
+                                                specification_obj:
+                                                    formData.specification_obj.filter(
+                                                        (_, i) => i !== idx
+                                                    ),
+                                            });
+                                        }}>
+                                        X
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
+                        <button
+                            style={{ height: "40px", marginTop: "8px", width: "fit-content" }}
+                            onClick={() =>
+                                setFormData({
+                                    ...formData,
+                                    specification_obj: [
+                                        ...formData.specification_obj,
+                                        { key: "", value: "" },
+                                    ],
+                                })
+                            }>
+                            + Thêm thông số
+                        </button>
+                    </div>
+                    <div className={styles.row}>
+                        <div>
+                            <label>Danh sách ảnh</label>
+                            <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                                {formData.images?.map((url, idx) => (
+                                    <div
+                                        style={{
+                                            display: "flex",
+                                            flexDirection: "row",
+                                            alignItems: "center",
+                                            justifyContent: "center",
+                                        }}
+                                        key={idx}>
+                                        <span style={{ marginRight: "8px", width: "60px" }}>{`Ảnh ${
+                                            idx + 1
+                                        }`}</span>
+                                        <input
+                                            style={{ flex: 1 }}
+                                            type="text"
+                                            value={url}
+                                            onChange={(e) => {
+                                                const newImages = [...formData.images];
+                                                newImages[idx] = e.target.value;
+                                                setFormData({ ...formData, images: newImages });
+                                            }}
+                                        />
+                                        <button
+                                            style={{ marginLeft: "8px" }}
+                                            onClick={() => {
+                                                setFormData({
+                                                    ...formData,
+                                                    images: formData.images.filter(
+                                                        (_, i) => i !== idx
+                                                    ),
+                                                });
+                                            }}>
+                                            X
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
+                            <button
+                                style={{ height: "40px", marginTop: "8px", width: "fit-content" }}
+                                onClick={() =>
+                                    setFormData({ ...formData, images: [...formData.images, ""] })
+                                }>
+                                + Thêm ảnh
+                            </button>
                         </div>
                     </div>
                     <div className={styles.row}>

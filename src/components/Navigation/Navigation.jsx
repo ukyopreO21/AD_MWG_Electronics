@@ -17,7 +17,7 @@ export default () => {
     return (
         <aside className={styles.container}>
             <div className={styles.main}>
-                <img src="/logo-with-text.png" alt="UITGear Logo" />
+                <img src="/logo-with-text.png" alt="MWG Electronics Logo" />
                 <div className={styles.navigation}>
                     <Link
                         style={{
