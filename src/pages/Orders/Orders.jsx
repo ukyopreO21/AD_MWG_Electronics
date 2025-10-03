@@ -15,9 +15,17 @@ export default () => {
     const [query, setQuery] = useState("");
     const [lastQuery, setLastQuery] = useState("");
     const { orders, totalOrders, page, totalPages, getOrdersByQuery } = useOrders();
+
     useEffect(() => {
         handleGetFinishOrders();
     }, []);
+
+    useEffect(() => {
+        if (query.trim() === "") {
+            getOrdersByQuery("thanh toán", 1);
+            setLastQuery("");
+        }
+    }, [query]);
 
     const handleSearch = (e) => {
         if (e.key === "Enter" && query.trim() !== "") {
@@ -30,10 +38,10 @@ export default () => {
         getOrdersByQuery(lastQuery, newPage);
     };
     const handleGetFinishOrders = () => {
-        getOrdersByQuery("Đã thanh toán", 1);
+        getOrdersByQuery("thanh toán", 1);
         setQuery("");
         setLastQuery("");
-    }
+    };
     return (
         <div className={styles.container}>
             <div className={styles.function}>
